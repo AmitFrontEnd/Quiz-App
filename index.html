@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz app</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" type="module"></script>
+</head>
+<body>
+  <div class="home-container">
+    <img src="start.png" class="start-img" />
+    <button class="start-quiz">Start Now &gt; &gt; &gt;</button>
+  </div>
+  <div class="container">
+    <div class="img-soundcontainer">
+      <img src="start.png" class="start-img" />
+      <img src="sound.svg" style="cursor: pointer" class="sound" />
+      <img src="mute.png" style="cursor: pointer" class="mute" />
+    </div>
+    <div class="score-container"><span class="score">00</span>/25</div>
+    <div class="question-render"></div>
+    <div class="timer-container">00: <span class="timer">30</span></div>
+    <div class="answer-container">
+      <div type="text" class="answer" data-index="0">
+        <span class="answer-1"></span>
+        <p>
+          <span class="chosen">You chose</span> <img src="wrong.png" alt="" />
+        </p>
+      </div>
+      <div type="text" class="answer" data-index="1">
+        <span class="answer-2"></span>
+        <p>
+          <span class="chosen">You chose</span> <img src="wrong.png" alt="" />
+        </p>
+      </div>
+      <div type="text" class="answer" data-index="2">
+        <span class="answer-3"></span>
+        <p>
+          <span class="chosen">You chose</span> <img src="wrong.png" alt="" />
+        </p>
+      </div>
+      <div type="text" class="answer" data-index="3">
+        <span class="answer-4"></span>
+        <p>
+          <span class="chosen">You chose</span> <img src="wrong.png" alt="" />
+        </p>
+      </div>
+    </div>
+    <button class="next">Next &gt;</button>
+  </div>
+  <p class="love">Made with ❤️ by Amit Kumar</p>
+</body>
+</html>
