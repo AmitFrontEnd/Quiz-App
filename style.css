@@ -181,9 +181,12 @@ body {
   }
   .answer {
     padding: 12px 16px;
-    font-size: 13px;
+    font-size: 11px;
   }
   .next {
     margin-top: 2rem;
   }
+ .sound,.mute{
+  width: 32px;
+ }
 }
