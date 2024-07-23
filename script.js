@@ -1,8 +1,9 @@
 import { questions } from "./quiz.js";
-
 let timerCount = 30;
 let intervalId;
-let audio = new Audio('music.mp3');
+let scoreCount = 1;
+
+let audio = new Audio('music.mp3')
 let startBtn = document.querySelector('.start-quiz');
 let container = document.querySelector('.container');
 let homeContainer = document.querySelector('.home-container');
@@ -16,24 +17,32 @@ let answer3 = document.querySelector('.answer-3');
 let answer4 = document.querySelector('.answer-4');
 let currentQuestion = 0;
 let nextQuestion = document.querySelector('.next');
-let sound = document.querySelector('.sound');
-let mute = document.querySelector('.mute');
-let answerContainer = document.querySelector('.answer-container');
-let answers = document.querySelectorAll('.answer');
+let sound = document.querySelector('.sound')
+let mute = document.querySelector('.mute')
+let answerContainer = document.querySelector('.answer-container')
+let answers = document.querySelectorAll('.answer')
+let correctAnswer = 0;
 
-let rightanswer = questions[currentQuestion].answer;
+let rightanswer;
+
+score.textContent = scoreCount
+
 
 mute.addEventListener('click', () => {
-    mute.style.display = 'none';
-    sound.style.display = 'block';
-    audio.play();
-});
-
+    mute.style.display = 'none'
+    sound.style.display = 'block'
+    audio.play()
+})
 sound.addEventListener('click', () => {
-    sound.style.display = 'none';
-    mute.style.display = 'block';
-    audio.pause();
-});
+    sound.style.display = 'none'
+    mute.style.display = 'block'
+    audio.pause()
+})
+
+
+rightanswer = questions[currentQuestion]['answer']
+console.log(rightanswer);
+
 
 startBtn.addEventListener('click', () => {
     container.classList.add('show-quiz');
@@ -43,53 +52,97 @@ startBtn.addEventListener('click', () => {
 
 function renderQuestions() {
     questionRender.textContent = questions[currentQuestion].question;
-    answer1.textContent = questions[currentQuestion].options[0];
-    answer2.textContent = questions[currentQuestion].options[1];
-    answer3.textContent = questions[currentQuestion].options[2];
-    answer4.textContent = questions[currentQuestion].options[3];
+    answer1.textContent = questions[currentQuestion].options[0]
+    answer2.textContent = questions[currentQuestion].options[1]
+    answer3.textContent = questions[currentQuestion].options[2]
+    answer4.textContent = questions[currentQuestion].options[3]
 }
 
-function startTimer() {
+
+startTimer()
+
+
+renderQuestions(); function startTimer() {
+    
     clearInterval(intervalId);
 
     intervalId = setInterval(() => {
         timerCount--;
-        timer.textContent = timerCount < 10 ? `0${timerCount}` : timerCount;
+        timer.textContent = timerCount < 10 ? 0`${timerCount}` : timerCount;
+        if (timerCount <= 15 && timerCount > 5) {
+            body.style.backgroundColor = '#E4E5C7';
+            timer.parentElement.style.backgroundColor = '#C5B1006E';
+        } else if (timerCount <= 5) {
+            body.style.backgroundColor = '#DBADAD';
+            timer.parentElement.style.backgroundColor = '#C50C006E';
+        } else {
+            body.style.backgroundColor = '#CCE2C2'; // Default background color
+            timer.parentElement.style.backgroundColor = '#15a71c'; // Default timer background color
+        }
+
         if (timerCount <= 0) {
             clearInterval(intervalId);
-            timer.textContent = "00";
-            timerCount = 30;
-            currentQuestion++;
-            renderQuestions();
-            startTimer();
+            // Handle the end of the timer here, if necessary
         }
     }, 1000);
 }
 
-renderQuestions();
-startTimer();
-
-answers.forEach((answer, index) => {
-    answer.addEventListener('click', (e) => {
-        answers.forEach(ans => ans.removeAttribute('style'));
-
-        e.currentTarget.style.border = '3px solid #cfe0e3';
-        clearInterval(intervalId);
-
-        if (index === questions[currentQuestion].answer) {
-            score.textContent = (parseInt(score.textContent) + 1).toString().padStart(2, '0');
-            e.currentTarget.classList.add('right');
-        } else {
-            e.currentTarget.classList.add('wrong');
-        }
-    });
-});
-
 nextQuestion.addEventListener('click', () => {
     currentQuestion++;
-    if (currentQuestion >= questions.length) {
+    if (currentQuestion === questions.length) { // Assuming there are 24 questions
         currentQuestion = 0;
     }
     renderQuestions();
-    startTimer();
+    rightanswer = questions[currentQuestion]['answer']
+    timerCount = 31
+    startTimer()
+
+
+    answers.forEach((item) => {
+        item.classList.remove('right');
+        item.classList.remove('wrong');
+        item.style.pointerEvents = 'all'
+        let pElem = item.querySelector('p');
+        pElem.style.display = 'none';
+        pElem.querySelector('img').src = 'wrong.png';
+    })
+    scoreCount++
+    score.textContent = scoreCount
+});
+
+answerContainer.addEventListener('click', (e) => {
+    let targetElement = e.target.closest('.answer');
+
+    // Disable pointer events on all answers
+    answers.forEach(item => {
+        item.style.pointerEvents = 'none';
+    });
+
+    if (targetElement && targetElement.classList.contains('answer')) {
+        answerContainer.style.pointerEvents = 'none';
+        let index = targetElement.getAttribute('data-index');
+
+        let pElement = targetElement.querySelector('p');
+        let imgElement = pElement.querySelector('img');
+
+        if (index == rightanswer) {
+            targetElement.classList.add('right');
+            correctAnswer++;
+            console.log('right', correctAnswer);
+            
+            // Debug: Check if imgElement exists
+            console.log('imgElement:', imgElement);
+
+            // Set the image source
+            imgElement.src = 'correct.png';
+            imgElement.style.display = 'block';
+            pElement.querySelector('.chosen').style.display = 'none';
+        } else {
+            targetElement.classList.add('wrong');
+            imgElement.style.display = 'block';
+            pElement.style.display = 'flex';
+            if (correctAnswer != 0) correctAnswer--;
+            console.log(correctAnswer);
+        }
+    }
 });
