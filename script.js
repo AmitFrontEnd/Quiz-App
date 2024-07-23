@@ -41,7 +41,7 @@ sound.addEventListener('click', () => {
 
 
 rightanswer = questions[currentQuestion]['answer']
-console.log(rightanswer);
+
 
 
 startBtn.addEventListener('click', () => {
@@ -59,16 +59,19 @@ function renderQuestions() {
 }
 
 
-startTimer()
 
 
-renderQuestions(); function startTimer() {
-    
+renderQuestions()
+
+
+function startTimer() {
+
     clearInterval(intervalId);
 
     intervalId = setInterval(() => {
         timerCount--;
-        timer.textContent = timerCount < 10 ? 0`${timerCount}` : timerCount;
+        timer.textContent = timerCount < 10 ? `0${timerCount}` : timerCount;
+
         if (timerCount <= 15 && timerCount > 5) {
             body.style.backgroundColor = '#E4E5C7';
             timer.parentElement.style.backgroundColor = '#C5B1006E';
@@ -82,44 +85,44 @@ renderQuestions(); function startTimer() {
 
         if (timerCount <= 0) {
             clearInterval(intervalId);
-            // Handle the end of the timer here, if necessary
         }
     }, 1000);
 }
+startTimer()
 
 nextQuestion.addEventListener('click', () => {
     currentQuestion++;
     if (currentQuestion === questions.length) { // Assuming there are 24 questions
         currentQuestion = 0;
+        scoreCount=0;
     }
     renderQuestions();
     rightanswer = questions[currentQuestion]['answer']
     timerCount = 31
     startTimer()
-
+    rightanswer = questions[currentQuestion]['answer']
+    console.log(rightanswer);
 
     answers.forEach((item) => {
         item.classList.remove('right');
         item.classList.remove('wrong');
         item.style.pointerEvents = 'all'
-        let pElem = item.querySelector('p');
+        let pElem=item.querySelector('p')
         pElem.style.display = 'none';
-        pElem.querySelector('img').src = 'wrong.png';
+       
     })
     scoreCount++
     score.textContent = scoreCount
+
 });
 
 answerContainer.addEventListener('click', (e) => {
     let targetElement = e.target.closest('.answer');
 
-    // Disable pointer events on all answers
-    answers.forEach(item => {
-        item.style.pointerEvents = 'none';
-    });
+   
 
     if (targetElement && targetElement.classList.contains('answer')) {
-        answerContainer.style.pointerEvents = 'none';
+    
         let index = targetElement.getAttribute('data-index');
 
         let pElement = targetElement.querySelector('p');
@@ -129,20 +132,18 @@ answerContainer.addEventListener('click', (e) => {
             targetElement.classList.add('right');
             correctAnswer++;
             console.log('right', correctAnswer);
-            
-            // Debug: Check if imgElement exists
-            console.log('imgElement:', imgElement);
 
-            // Set the image source
+      
             imgElement.src = 'correct.png';
             imgElement.style.display = 'block';
             pElement.querySelector('.chosen').style.display = 'none';
+            pElement.style.display='flex'
         } else {
             targetElement.classList.add('wrong');
             imgElement.style.display = 'block';
             pElement.style.display = 'flex';
             if (correctAnswer != 0) correctAnswer--;
-            console.log(correctAnswer);
+           
         }
     }
 });
