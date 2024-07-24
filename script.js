@@ -85,6 +85,7 @@ function startTimer() {
 
         if (timerCount <= 0) {
             clearInterval(intervalId);
+            nextQuestion.click();
         }
     }, 1000);
 }
@@ -95,7 +96,7 @@ nextQuestion.addEventListener('click', () => {
     if (currentQuestion === questions.length) { // Assuming there are 24 questions
         currentQuestion = 0;
         scoreCount = 0;
-        alert('Your total correct answer is :'  + correctAnswer)
+        alert('Your total correct answer is :' + correctAnswer)
     }
     renderQuestions();
     rightanswer = questions[currentQuestion]['answer']
@@ -107,14 +108,17 @@ nextQuestion.addEventListener('click', () => {
     answers.forEach((item) => {
         item.classList.remove('right');
         item.classList.remove('wrong');
-        item.style.pointerEvents = 'all'
         let pElem = item.querySelector('p')
         pElem.style.display = 'none';
         let img = item.querySelector('p img')
         img.src = 'wrong.png'
         pElem.querySelector('.chosen').style.display = 'block';
 
+        item.style.pointerEvents = 'all'
+
     })
+    answerContainer.style.pointerEvents = 'all'
+
     scoreCount++
     score.textContent = scoreCount
 
@@ -126,28 +130,47 @@ answerContainer.addEventListener('click', (e) => {
 
 
     if (targetElement && targetElement.classList.contains('answer')) {
-
+    
         let index = targetElement.getAttribute('data-index');
 
         let pElement = targetElement.querySelector('p');
         let imgElement = pElement.querySelector('img');
-
+        clearInterval(intervalId); 
         if (index == rightanswer) {
             targetElement.classList.add('right');
+            answerContainer.style.pointerEvents = 'none'
+
             correctAnswer++;
             console.log('right', correctAnswer);
-
+            clearInterval(intervalId)
 
             imgElement.src = 'correct.png';
             imgElement.style.display = 'block';
             pElement.querySelector('.chosen').style.display = 'none';
             pElement.style.display = 'flex'
+          
         } else {
             targetElement.classList.add('wrong');
+            answerContainer.children[rightanswer].classList.add('right')
+            answerContainer.children[rightanswer].querySelector('p').style.display='flex'
+            answerContainer.children[rightanswer].querySelector('p img').src='correct.png'
+            answerContainer.children[rightanswer].querySelector('.chosen').style.display='none'
+            answerContainer.style.pointerEvents = 'none'
+
             imgElement.style.display = 'block';
             pElement.style.display = 'flex';
+          
             if (correctAnswer != 0) correctAnswer--;
 
-        }
+        } answerContainer.style.pointerEvents = 'none';
+
+
+        answers.forEach((item) => {
+            item.style.pointerEvents = 'none';
+        });
     }
+
+
+
+
 });

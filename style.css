@@ -177,7 +177,7 @@ body {
   }
   .question-render {
     padding: 8px 32px;
-    font-size: 16px;
+    font-size: 13px;
   }
   .answer {
     padding: 12px 16px;
@@ -188,5 +188,8 @@ body {
   }
  .sound,.mute{
   width: 32px;
+ }
+ .love{
+  font-size: 14px;
  }
 }
