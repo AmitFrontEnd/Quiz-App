@@ -42,18 +42,21 @@ body {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  display: none;
+  
 }
 
 .container {
   max-width: 800px;
   margin: 2.5rem auto;
   padding: 2rem 2rem 0 2rem;
+  transform: translateX(-92vw);
+ transition: all .3s;
 
 }
 
 .show-quiz {
   display: block;
+  transform: translateX(0);
 }
 
 .img-soundcontainer {

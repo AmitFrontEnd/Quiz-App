@@ -24,6 +24,21 @@ let answers = document.querySelectorAll('.answer')
 let correctAnswer = 0;
 
 let rightanswer;
+checkDisable()
+function checkDisable() {
+    let found = false;
+    answers.forEach(answer => {
+        if (answer.classList.contains('right') || answer.classList.contains('wrong')) {
+            found = true;
+        }
+    });
+
+    if (found) {
+        nextQuestion.disabled = false;
+    } else {
+        nextQuestion.disabled = true;
+    }
+}
 
 score.textContent = scoreCount
 
@@ -48,6 +63,8 @@ startBtn.addEventListener('click', () => {
     container.classList.add('show-quiz');
     homeContainer.style.display = 'none';
     body.style.backgroundColor = '#CCE2C2';
+    renderQuestions()
+    startTimer()
 });
 
 function renderQuestions() {
@@ -61,9 +78,6 @@ function renderQuestions() {
 
 
 
-renderQuestions()
-
-
 function startTimer() {
 
     clearInterval(intervalId);
@@ -75,21 +89,25 @@ function startTimer() {
         if (timerCount <= 15 && timerCount > 5) {
             body.style.backgroundColor = '#E4E5C7';
             timer.parentElement.style.backgroundColor = '#C5B1006E';
+            nextQuestion.style.color = '#C5B1006E'
+
         } else if (timerCount <= 5) {
             body.style.backgroundColor = '#DBADAD';
             timer.parentElement.style.backgroundColor = '#C50C006E';
+            nextQuestion.style.color = '#C50C006E'
         } else {
             body.style.backgroundColor = '#CCE2C2'; // Default background color
             timer.parentElement.style.backgroundColor = '#15a71c'; // Default timer background color
+            nextQuestion.style.color = '#15a71c'
         }
 
         if (timerCount <= 0) {
             clearInterval(intervalId);
+            nextQuestion.disabled=false
             nextQuestion.click();
         }
     }, 1000);
 }
-startTimer()
 
 nextQuestion.addEventListener('click', () => {
     currentQuestion++;
@@ -98,6 +116,10 @@ nextQuestion.addEventListener('click', () => {
         scoreCount = 0;
         alert('Your total correct answer is :' + correctAnswer)
     }
+
+
+
+
     renderQuestions();
     rightanswer = questions[currentQuestion]['answer']
     timerCount = 31
@@ -120,8 +142,9 @@ nextQuestion.addEventListener('click', () => {
     answerContainer.style.pointerEvents = 'all'
 
     scoreCount++
-    score.textContent = scoreCount
+    score.textContent = scoreCount;
 
+checkDisable()
 });
 
 answerContainer.addEventListener('click', (e) => {
@@ -130,12 +153,11 @@ answerContainer.addEventListener('click', (e) => {
 
 
     if (targetElement && targetElement.classList.contains('answer')) {
-    
+      
         let index = targetElement.getAttribute('data-index');
-
         let pElement = targetElement.querySelector('p');
         let imgElement = pElement.querySelector('img');
-        clearInterval(intervalId); 
+        clearInterval(intervalId);
         if (index == rightanswer) {
             targetElement.classList.add('right');
             answerContainer.style.pointerEvents = 'none'
@@ -148,18 +170,18 @@ answerContainer.addEventListener('click', (e) => {
             imgElement.style.display = 'block';
             pElement.querySelector('.chosen').style.display = 'none';
             pElement.style.display = 'flex'
-          
+
         } else {
             targetElement.classList.add('wrong');
             answerContainer.children[rightanswer].classList.add('right')
-            answerContainer.children[rightanswer].querySelector('p').style.display='flex'
-            answerContainer.children[rightanswer].querySelector('p img').src='correct.png'
-            answerContainer.children[rightanswer].querySelector('.chosen').style.display='none'
+            answerContainer.children[rightanswer].querySelector('p').style.display = 'flex'
+            answerContainer.children[rightanswer].querySelector('p img').src = 'correct.png'
+            answerContainer.children[rightanswer].querySelector('.chosen').style.display = 'none'
             answerContainer.style.pointerEvents = 'none'
 
             imgElement.style.display = 'block';
             pElement.style.display = 'flex';
-          
+
             if (correctAnswer != 0) correctAnswer--;
 
         } answerContainer.style.pointerEvents = 'none';
@@ -168,9 +190,8 @@ answerContainer.addEventListener('click', (e) => {
         answers.forEach((item) => {
             item.style.pointerEvents = 'none';
         });
+        checkDisable()
+
     }
-
-
-
-
 });
+
