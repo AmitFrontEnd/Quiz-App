@@ -94,7 +94,8 @@ nextQuestion.addEventListener('click', () => {
     currentQuestion++;
     if (currentQuestion === questions.length) { // Assuming there are 24 questions
         currentQuestion = 0;
-        scoreCount=0;
+        scoreCount = 0;
+        alert('Your total correct answer is :'  + correctAnswer)
     }
     renderQuestions();
     rightanswer = questions[currentQuestion]['answer']
@@ -107,9 +108,12 @@ nextQuestion.addEventListener('click', () => {
         item.classList.remove('right');
         item.classList.remove('wrong');
         item.style.pointerEvents = 'all'
-        let pElem=item.querySelector('p')
+        let pElem = item.querySelector('p')
         pElem.style.display = 'none';
-       
+        let img = item.querySelector('p img')
+        img.src = 'wrong.png'
+        pElem.querySelector('.chosen').style.display = 'block';
+
     })
     scoreCount++
     score.textContent = scoreCount
@@ -119,10 +123,10 @@ nextQuestion.addEventListener('click', () => {
 answerContainer.addEventListener('click', (e) => {
     let targetElement = e.target.closest('.answer');
 
-   
+
 
     if (targetElement && targetElement.classList.contains('answer')) {
-    
+
         let index = targetElement.getAttribute('data-index');
 
         let pElement = targetElement.querySelector('p');
@@ -133,17 +137,17 @@ answerContainer.addEventListener('click', (e) => {
             correctAnswer++;
             console.log('right', correctAnswer);
 
-      
+
             imgElement.src = 'correct.png';
             imgElement.style.display = 'block';
             pElement.querySelector('.chosen').style.display = 'none';
-            pElement.style.display='flex'
+            pElement.style.display = 'flex'
         } else {
             targetElement.classList.add('wrong');
             imgElement.style.display = 'block';
             pElement.style.display = 'flex';
             if (correctAnswer != 0) correctAnswer--;
-           
+
         }
     }
 });
