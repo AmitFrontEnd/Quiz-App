@@ -49,11 +49,10 @@ body {
   max-width: 800px;
   margin: 2.5rem auto;
   padding: 2rem 2rem 0 2rem;
-  transform: translateX(-92vw);
+  transform: translateX(-100vw);
  transition: all .3s;
 
 }
-
 .show-quiz {
   display: block;
   transform: translateX(0);
@@ -169,12 +168,112 @@ body {
 .sound {
   display: none;
 }
+.home-container,.container{
+  /* display: none; */
+}
+.result-container{
+  max-width: 800px;
+  margin: 2.5rem auto;
+  padding: 2rem 2rem 0 2rem;
+  text-align: center;
+}
+
+.result-container button{
+  color: white;
+  background-color: #35bd3a;
+  border: none;
+  outline: none;
+  padding: 6px 15px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 12px;
+  box-shadow: 3px 2px 3px 1px #387f3a;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.result-container{
+  color: #535353;
+  font-weight: 600;
+}
+
+.result-chart{
+  width: 400px;
+  height: 50px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5rem;
+  position: relative;
+}
+.result-container h3{
+  margin-bottom: 2rem;
+}
+
+
+.success{
+  height: 100%;
+  background-color: #35BD3A;
+  border-radius: 4px;
+  position: relative;
+
+}
+
+
+.fail{
+  height: 100%;
+  background-color: #FF7A7A;
+  position: relative;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  
+}
+
+.success img{
+  position: absolute;
+  top: 35%;
+  left: -20px;
+}
+.fail img{
+  position: absolute;
+  top: 35%;
+  right: -20px;
+}
+
+.result-container h2{
+  margin-bottom: 5rem;
+}
+
+.social-container{
+  margin-top: 3rem;
+}
+
+.social-container img{
+  margin-right: 12px;
+}
+.score-content {
+  position: absolute;
+  bottom: -136%;
+  display: flex;
+  justify-content: space-between;
+  width: 126%;
+  left: -12%;
+}
 
 @media (max-width: 768px) {
   .score-container, .timer-container {
     width: 75px;
     font-size: 16px;
   }
+  .score-content {
+    position: absolute;
+    bottom: -88%;
+    display: flex;
+    justify-content: space-between;
+    width: 131%;
+    left: -14%;
+}
+
   .start-img {
     max-width: 120px;
   }
@@ -195,4 +294,17 @@ body {
  .love{
   font-size: 14px;
  }
+ .fail img{
+  right: -40%;
+    width: 40px;
 }
+.success img{
+  left: -10%;
+    width: 40px;
+}
+.result-chart{
+  width: 250px;
+}
+}
+ 
+

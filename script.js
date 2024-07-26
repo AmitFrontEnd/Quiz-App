@@ -1,8 +1,9 @@
 import { questions } from "./quiz.js";
 let timerCount = 30;
 let intervalId;
-let scoreCount = 1;
-
+let scoreCount = localStorage.getItem('storedCount') ? parseInt(localStorage.getItem('storedCount')) : 1;
+localStorage.setItem('storedCount', scoreCount)
+let success = document.querySelector('.success')
 let audio = new Audio('music.mp3')
 let startBtn = document.querySelector('.start-quiz');
 let container = document.querySelector('.container');
@@ -15,13 +16,55 @@ let answer1 = document.querySelector('.answer-1');
 let answer2 = document.querySelector('.answer-2');
 let answer3 = document.querySelector('.answer-3');
 let answer4 = document.querySelector('.answer-4');
-let currentQuestion = 0;
 let nextQuestion = document.querySelector('.next');
 let sound = document.querySelector('.sound')
 let mute = document.querySelector('.mute')
 let answerContainer = document.querySelector('.answer-container')
 let answers = document.querySelectorAll('.answer')
-let correctAnswer = 0;
+let correctAnswer = localStorage.getItem('storedCorrect') ? parseInt(localStorage.getItem('storedCorrect')) : 0;
+let correctPercent = document.querySelector('.correct-percent')
+let wrongPercent = document.querySelector('.wrong-percent')
+let totalCorrect = document.querySelector('.total-correct')
+let wrongAnswer = 0;
+let fail = document.querySelector('.fail')
+totalCorrect.textContent = localStorage.getItem('storedCorrect')
+
+
+localStorage.setItem('storedCorrect', correctAnswer)
+let currentQuestion = localStorage.getItem('storedQuestion') ? parseInt(localStorage.getItem('storedQuestion')) : 0;
+
+localStorage.setItem('storedQuestion', currentQuestion);
+let  imgInsideSuccess = document.querySelector('.success img');
+let imgInsideFail = document.querySelector('.fail img');
+
+correctPercent.textContent = localStorage.getItem('storedCorrectPercent')
+wrongPercent.textContent = localStorage.getItem('storedWrongPercent')
+success.style.width = `${localStorage.getItem('storedCorrectPercent')}%`;
+fail.style.width = `${localStorage.getItem('storedWrongPercent')}%`;
+// Hide the image if the storedWrongPercent is 0
+function imageSetup(){
+    
+if (parseFloat(localStorage.getItem('storedWrongPercent')) === 0) {
+    imgInsideFail.style.display = 'none';
+} else {
+    // Apply the right position based on the percentage ranges
+    if (parseFloat(localStorage.getItem('storedWrongPercent')) < 10) {
+        imgInsideFail.style.right = '-25px';
+    } else if (parseFloat(localStorage.getItem('storedWrongPercent')) < 15) {
+        imgInsideFail.style.right = '-30px';
+    } else if (parseFloat(localStorage.getItem('storedWrongPercent')) > 21) {
+        imgInsideFail.style.right = '-20px';
+    }
+}
+
+// Apply the left position for imgInsideSuccess if storedCorrectPercent is less than 15
+if (parseFloat(localStorage.getItem('storedCorrectPercent')) < 15) {
+    imgInsideSuccess.style.left = '-28px';
+}
+}
+
+imageSetup()
+
 
 let rightanswer;
 checkDisable()
@@ -103,18 +146,45 @@ function startTimer() {
 
         if (timerCount <= 0) {
             clearInterval(intervalId);
-            nextQuestion.disabled=false
+            nextQuestion.disabled = false
             nextQuestion.click();
         }
     }, 1000);
 }
 
 nextQuestion.addEventListener('click', () => {
+
     currentQuestion++;
-    if (currentQuestion === questions.length) { // Assuming there are 24 questions
+    localStorage.setItem('storedQuestion', currentQuestion);
+
+    if (currentQuestion === questions.length) {
         currentQuestion = 0;
+        localStorage.setItem('storedQuestion', currentQuestion);
         scoreCount = 0;
+        localStorage.setItem('storedCount', scoreCount)
         alert('Your total correct answer is :' + correctAnswer)
+        wrongAnswer = 25 - correctAnswer
+        totalCorrect.textContent = correctAnswer
+        correctPercent.textContent = localStorage.getItem('storedCorrectPercent')
+        wrongPercent.textContent = localStorage.getItem('storedWrongPercent')
+
+
+
+        // Calculate the percentage of correct answers
+        let correctPercentValue = (correctAnswer / 25) * 100;
+        localStorage.setItem('storedCorrectPercent', correctPercentValue.toFixed(2));
+        let storedCorrectPercent = parseFloat(localStorage.getItem('storedCorrectPercent'));
+        correctPercent.textContent = storedCorrectPercent.toFixed(2);
+        success.style.width = `${storedCorrectPercent}%`;
+
+        // Calculate the percentage of wrong answers
+        let wrongPercentValue = (wrongAnswer / 25) * 100;
+        localStorage.setItem('storedWrongPercent', wrongPercentValue.toFixed(2));
+        let storedWrongPercent = parseFloat(localStorage.getItem('storedWrongPercent'));
+        wrongPercent.textContent = storedWrongPercent.toFixed(2);
+        fail.style.width = `${storedWrongPercent}%`;
+        imageSetup()
+
     }
 
 
@@ -125,7 +195,6 @@ nextQuestion.addEventListener('click', () => {
     timerCount = 31
     startTimer()
     rightanswer = questions[currentQuestion]['answer']
-    console.log(rightanswer);
 
     answers.forEach((item) => {
         item.classList.remove('right');
@@ -142,9 +211,11 @@ nextQuestion.addEventListener('click', () => {
     answerContainer.style.pointerEvents = 'all'
 
     scoreCount++
+    localStorage.setItem('storedCount', scoreCount)
+
     score.textContent = scoreCount;
 
-checkDisable()
+    checkDisable()
 });
 
 answerContainer.addEventListener('click', (e) => {
@@ -153,7 +224,7 @@ answerContainer.addEventListener('click', (e) => {
 
 
     if (targetElement && targetElement.classList.contains('answer')) {
-      
+
         let index = targetElement.getAttribute('data-index');
         let pElement = targetElement.querySelector('p');
         let imgElement = pElement.querySelector('img');
@@ -163,6 +234,8 @@ answerContainer.addEventListener('click', (e) => {
             answerContainer.style.pointerEvents = 'none'
 
             correctAnswer++;
+
+            localStorage.setItem('storedCorrect', correctAnswer)
             console.log('right', correctAnswer);
             clearInterval(intervalId)
 
@@ -182,7 +255,6 @@ answerContainer.addEventListener('click', (e) => {
             imgElement.style.display = 'block';
             pElement.style.display = 'flex';
 
-            if (correctAnswer != 0) correctAnswer--;
 
         } answerContainer.style.pointerEvents = 'none';
 
