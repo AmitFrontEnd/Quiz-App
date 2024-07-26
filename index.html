@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Quiz app</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="script.js" type="module"></script>
+
 </head>
 <body>
   <div class="home-container">
@@ -68,13 +70,15 @@
       </div>
     </div>
     <h3>“Keep learning, you have a good score!”</h3>
-    <button>&lt; &lt; &lt; Retry</button>
+    <button class="reset">&lt; &lt; &lt; Retry</button>
     <p>Share your score:</p>
     <div class="social-container">
-      <img src="🦆 icon _LinkedIn_.png" alt="">
-      <img src="🦆 icon _Twitter Square_.png" alt="">
-      <img src="🦆 icon _Instagram Square_.png" alt="">
+      <img src="🦆 icon _LinkedIn_.png" id="linked-icon">
+      <img src="🦆 icon _Twitter Square_.png" alt="" id="twitter-icon">
+      <img src="🦆 icon _Instagram Square_.png" alt="" id="insta-icon">
     </div>
   </div>
+  
+
 </body>
 </html>

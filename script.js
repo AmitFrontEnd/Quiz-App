@@ -28,13 +28,17 @@ let totalCorrect = document.querySelector('.total-correct')
 let wrongAnswer = 0;
 let fail = document.querySelector('.fail')
 totalCorrect.textContent = localStorage.getItem('storedCorrect')
+let reset=document.querySelector('.reset')
 
+
+let resultContainer = document.querySelector('.result-container')
+let mainContainer = document.querySelector('.container')
 
 localStorage.setItem('storedCorrect', correctAnswer)
 let currentQuestion = localStorage.getItem('storedQuestion') ? parseInt(localStorage.getItem('storedQuestion')) : 0;
 
 localStorage.setItem('storedQuestion', currentQuestion);
-let  imgInsideSuccess = document.querySelector('.success img');
+let imgInsideSuccess = document.querySelector('.success img');
 let imgInsideFail = document.querySelector('.fail img');
 
 correctPercent.textContent = localStorage.getItem('storedCorrectPercent')
@@ -42,25 +46,25 @@ wrongPercent.textContent = localStorage.getItem('storedWrongPercent')
 success.style.width = `${localStorage.getItem('storedCorrectPercent')}%`;
 fail.style.width = `${localStorage.getItem('storedWrongPercent')}%`;
 // Hide the image if the storedWrongPercent is 0
-function imageSetup(){
-    
-if (parseFloat(localStorage.getItem('storedWrongPercent')) === 0) {
-    imgInsideFail.style.display = 'none';
-} else {
-    // Apply the right position based on the percentage ranges
-    if (parseFloat(localStorage.getItem('storedWrongPercent')) < 10) {
-        imgInsideFail.style.right = '-25px';
-    } else if (parseFloat(localStorage.getItem('storedWrongPercent')) < 15) {
-        imgInsideFail.style.right = '-30px';
-    } else if (parseFloat(localStorage.getItem('storedWrongPercent')) > 21) {
-        imgInsideFail.style.right = '-20px';
-    }
-}
+function imageSetup() {
 
-// Apply the left position for imgInsideSuccess if storedCorrectPercent is less than 15
-if (parseFloat(localStorage.getItem('storedCorrectPercent')) < 15) {
-    imgInsideSuccess.style.left = '-28px';
-}
+    if (parseFloat(localStorage.getItem('storedWrongPercent')) === 0) {
+        imgInsideFail.style.display = 'none';
+    } else {
+        // Apply the right position based on the percentage ranges
+        if (parseFloat(localStorage.getItem('storedWrongPercent')) < 10) {
+            imgInsideFail.style.right = '-25px';
+        } else if (parseFloat(localStorage.getItem('storedWrongPercent')) < 15) {
+            imgInsideFail.style.right = '-30px';
+        } else if (parseFloat(localStorage.getItem('storedWrongPercent')) > 21) {
+            imgInsideFail.style.right = '-20px';
+        }
+    }
+
+    // Apply the left position for imgInsideSuccess if storedCorrectPercent is less than 15
+    if (parseFloat(localStorage.getItem('storedCorrectPercent')) < 15) {
+        imgInsideSuccess.style.left = '-28px';
+    }
 }
 
 imageSetup()
@@ -149,7 +153,7 @@ function startTimer() {
             nextQuestion.disabled = false
             nextQuestion.click();
         }
-    }, 1000);
+    }, 900);
 }
 
 nextQuestion.addEventListener('click', () => {
@@ -162,7 +166,6 @@ nextQuestion.addEventListener('click', () => {
         localStorage.setItem('storedQuestion', currentQuestion);
         scoreCount = 0;
         localStorage.setItem('storedCount', scoreCount)
-        alert('Your total correct answer is :' + correctAnswer)
         wrongAnswer = 25 - correctAnswer
         totalCorrect.textContent = correctAnswer
         correctPercent.textContent = localStorage.getItem('storedCorrectPercent')
@@ -184,7 +187,12 @@ nextQuestion.addEventListener('click', () => {
         wrongPercent.textContent = storedWrongPercent.toFixed(2);
         fail.style.width = `${storedWrongPercent}%`;
         imageSetup()
+        mainContainer.style.display = 'none'
+        resultContainer.style.display = 'block'
+        clearInterval(intervalId);
+        correctAnswer = 0;
 
+        localStorage.setItem('storedCorrect', correctAnswer)
     }
 
 
@@ -267,3 +275,53 @@ answerContainer.addEventListener('click', (e) => {
     }
 });
 
+reset.addEventListener('click', () => {
+    clearInterval(intervalId); 
+    mainContainer.style.display = 'block';
+    resultContainer.style.display = 'none';
+    scoreCount = 1;
+    correctAnswer = 0;
+    currentQuestion = 0;
+    timerCount = 30;
+    localStorage.setItem('storedCount', scoreCount);
+    localStorage.setItem('storedCorrect', correctAnswer);
+    localStorage.setItem('storedQuestion', currentQuestion);
+    localStorage.setItem('storedCorrectPercent', 0);
+    localStorage.setItem('storedWrongPercent', 0);
+    correctPercent.textContent = 0;
+    wrongPercent.textContent = 0;
+    success.style.width = '0%';
+    fail.style.width = '0%';
+    imageSetup();
+    renderQuestions();
+    startTimer();
+    checkDisable();
+    score.textContent = scoreCount;
+})
+
+
+document.getElementById('twitter-icon').addEventListener('click', function() {
+    captureScreenshot();
+});
+document.getElementById('insta-icon').addEventListener('click', function() {
+    captureScreenshot();
+});
+document.getElementById('linked-icon').addEventListener('click', function() {
+    captureScreenshot();
+});
+
+
+function captureScreenshot() {
+html2canvas(document.querySelector('.result-container')).then(canvas => {
+    // Convert the canvas to an image
+    const screenshot = canvas.toDataURL('image/png');
+
+    // Create an anchor element to download the image
+    const link = document.createElement('a');
+    link.href = screenshot;
+    link.download = 'quiz-screenshot.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+}
