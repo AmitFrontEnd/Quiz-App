@@ -9,4 +9,4 @@ A responsive quiz application with multiple-choice questions, sound effects, and
 - Play/Pause background music during the quiz  
 
 ## Live Demo  
-🔗 [Play the Quiz](https://amitkumar1590.github.io/Quiz-App/)
+🔗 [Play the Quiz](https://amitfrontend.github.io/Quiz-App/)
